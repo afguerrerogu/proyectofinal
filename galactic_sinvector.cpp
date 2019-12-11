@@ -27,7 +27,7 @@ void rk4(double ta, double tb, double h, double x, double y, double z, double px
 
 int main(void){
 
-    rk4(0, 1000 , 0.1, x0,yi,z0,px0,py0,pz0);
+    rk4(0, 10000 , 0.1, x0,yi,z0,px0,py0,pz0);
     return 0;
 }
 

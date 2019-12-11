@@ -43,12 +43,12 @@ def f(t, x, y, z, px, py, pz , id):
 def runge_kutta_sis(f,x,y,z, px, py, pz, ti,tf,h):
     t = np.arange(ti,tf+h,h)
     n = len(t)
-    x = np.zeros(1000000000);
-    y = np.zeros(1000000000);
-    z = np.zeros(1000000000);
-    px =np.zeros(1000000000);
-    py =np.zeros(1000000000);
-    pz =np.zeros(1000000000);
+    x = np.zeros(10000000);
+    y = np.zeros(10000000);
+    z = np.zeros(10000000);
+    px =np.zeros(10000000);
+    py =np.zeros(10000000);
+    pz =np.zeros(10000000);
     
     x[0] = x0; y[0] = y0; z[0] = z0; px[0] = px0; py[0] = py0; pz[0] = pz0;
     
@@ -92,6 +92,6 @@ def runge_kutta_sis(f,x,y,z, px, py, pz, ti,tf,h):
         pz[nt+1] = pz[nt] + (p1 + 2*p2 + 2*p3 + p4)/6.0;    
 
     
-        print x[nt+1],y[nt+1],z[nt+1]
+        print (x[nt+1],y[nt+1],z[nt+1])
 
 runge_kutta_sis(f, x0,y0,z0,px0,py0,pz0, ti,tf,h)

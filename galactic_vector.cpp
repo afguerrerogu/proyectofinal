@@ -9,25 +9,29 @@ std::vector<double> px ={0.0};
 std::vector<double> py ={1.68884}; 
 std::vector<double> pz ={0.2}; 
 
+/*std::vector<double> xi ={0.994}; // {x0, y0, u0, vx} 
+std::vector<double> yi ={0.0};
+std::vector<double> ui ={0.0}; 
+std::vector<double> vi ={-2.001585}; 
+
+double const miu= 0.012277471;
+double const n=1-miu;*/
+
 const double A= 1.0;
 const double C= 1.0;
 const double w= 0.25;
 const double a= 1.25;
 const double b= 1.0;
 const double c= 0.75;
-//const double x[0]=2.5; 
-//const double y[0]=0.0;
-//const double z[0]=0.0;
-//const double px[0]=0.0;
-//const double py[0]=1.68884;
-//const double pz[0]=0.2;
+
 
 double f(double t,double  x,double y,double z,double px, double py,double pz , int id);
-void rk4(double ta, double tb, double h, std::vector<double> x,std::vector<double> y,std::vector<double> z,std::vector<double> px,std::vector<double> py,std::vector<double> pz);
+//double f(double t, double x, double y, double u, double v, int id);
+void rk4(double ta, double tb, double h, std::vector<double> x,std::vector<double> y,std::vector<double> u,std::vector<double> px,std::vector<double> py,std::vector<double> pz);
 
 int main(void){
 
-    rk4(0, 100000 , 0.025, x,y,z,px,py,pz);
+    rk4(0, 10000 , 0.025, x,y,z,px,py,pz);
     return 0;
 }
 
@@ -57,7 +61,27 @@ double f(double t, double x,double y,double z,double px,double py,double pz , in
     }
 }
 
-void rk4(double ta, double tb, double h, std::vector<double> x,std::vector<double> y,std::vector<double> z,std::vector<double> px,std::vector<double> py,std::vector<double> pz)
+/*double f(double t, double x, double y, double u, double v, int id){
+
+    if (0==id){
+        return u;
+    }
+    if (1==id){
+        return v;
+    }
+    if (2==id){
+        return x+2*v-n*((x+miu)/std::sqrt(pow(pow(x+miu,2)+pow(y,2),3))-miu*((x-n)/std::sqrt(pow(pow(x-n,2)+pow(y,2),3))));
+    }
+    if (3==id){
+        return y-2*u-n*((y)/std::sqrt(pow(pow(x+miu,2)+pow(y,2),3))-miu*((x-n)/std::sqrt(pow(pow(x-n,2)+pow(y,2),3))));
+    }
+    else
+    {
+        exit(1);
+    }
+}*/
+
+void rk4(double ta, double tb, double h, std::vector<double> x,std::vector<double> y,std::vector<double> z,std::vector<double> px ,std::vector<double> py,std::vector<double> pz)
 {
   std::cout.precision(15);
 
@@ -68,16 +92,20 @@ void rk4(double ta, double tb, double h, std::vector<double> x,std::vector<doubl
   double o1, o2, o3, o4;
   double p1, p2, p3, p4;
 
+  int kk=0;
+
   const int N = (tb-ta)/h;
   for (int nt = 0; nt < N; ++nt) {
     double t = ta + h*nt;
     
-    k1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt], 0);
-    l1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt], 1);
-    m1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt], 2);
-    n1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt], 3);
-    o1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt], 4);
-    p1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt], 5);
+
+
+    k1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt] , 0);
+    l1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt] , 1);
+    m1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt] , 2);
+    n1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt] , 3);
+    o1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt] , 4);
+    p1 = h*f(t, x[nt], y[nt], z[nt], px[nt], py[nt], pz[nt] , 5);
     
     
     k2= h*f(t + h/2, x[nt]+k1/2, y[nt]+l1/2, z[nt]+m1/2, px[nt]+n1/2, py[nt]+o1/2, pz[nt]+p1/2, 0);
@@ -111,7 +139,15 @@ void rk4(double ta, double tb, double h, std::vector<double> x,std::vector<doubl
     py[nt+1] = py[nt] + (o1 + 2*o2 + 2*o3 + o4)/6.0;
     pz[nt+1] = pz[nt] + (p1 + 2*p2 + 2*p3 + p4)/6.0;
 
-   std::cout  /* << t << "\t\t\t" */ << x[nt+1] << "\t" << y[nt+1] <<"\t" << z[nt+1] /* <<"\t\t" << y[3] <<"\t\t" << y[4] <<"\t\t" << y[5] */ << std::endl;
+    if (f(nt, x[nt+1], y[nt+1],z[nt+1], px[nt+1],py[nt+1],pz[nt+1],1)>0 && y[nt+1]>0)
+    {
+     std::cout  /* << t << "\t\t\t" */ << x[nt+1] << "\t" << y[nt+1] <<"\t" << z[nt+1] /* <<"\t\t" << y[3] <<"\t\t" << y[4] <<"\t\t" << y[5] */ << std::endl;
+    }
+
+
+    //kk=kk+1;
+    //std::cout<<kk<<std::endl;
+  
    
   }
 }
