@@ -3,7 +3,6 @@
 #include <vector>
 
 std::vector<double> y = {2.5, 0 , 0 , 0 , 1.68884, 0.2 }; // {x0, y0, z0, px , py, pz} 
-//std::vector<double> y = {0.994, 0 , 0 ,-2.001585 }; // {x0, y0, u0, vx }
 
 const double A= 1.0;
 const double C= 1.0;
@@ -12,15 +11,13 @@ const double a= 1.25;
 const double b= 1.0;
 const double c= 0.75;
 
-/*double const miu= 0.012277471;
-double const n=1-miu;*/
 
 double f(double t, const std::vector<double>  y, int id);
 void rk4(double ta, double tb, double h, std::vector<double> & y);
 
 int main(void){
 
-    rk4(0, 10000 , 0.025, y);
+    rk4(0, 1000000 , 0.1, y);
     return 0;
 }
 
@@ -49,26 +46,6 @@ double f(double t, const std::vector<double>  y, int id){
         exit(1);
     }
 }
-
-/*double f(double t, const std::vector<double>  y, int id){
-
-    if (0==id){
-        return y[2];
-    }
-    if (1==id){
-        return y[3];
-    }
-    if (2==id){
-        return y[0]+2*y[3]-n*((y[0]+miu)/std::sqrt(pow(pow(y[0]+miu,2)+pow(y[1],2),3))-miu*((y[0]-n)/std::sqrt(pow(pow(y[0]-n,2)+pow(y[1],2),3))));
-    }
-    if (3==id){
-        return y[1]-2*y[2]-n*((y[1])/std::sqrt(pow(pow(y[0]+miu,2)+pow(y[1],2),3))-miu*((y[0]-n)/std::sqrt(pow(pow(y[0]-n,2)+pow(y[1],2),3))));
-    }
-    else
-    {
-        exit(1);
-    }
-}*/
 
 void rk4(double ta, double tb, double h, std::vector<double> & y)
 {
@@ -125,7 +102,7 @@ void rk4(double ta, double tb, double h, std::vector<double> & y)
       y[ii] = y[ii] + (k1[ii] + 2*k2[ii] + 2*k3[ii] + k4[ii])/6.0;
     }
 
-    if (f(nt, y, 1)>0 && y[1]> 0)
+    if (f(nt, y, 1)>0 && y[0]> 0. && std::abs(y[1])< 0.01)
     {
       std::cout  /* << t << "\t\t\t" */ << y[0] << "\t" << y[1] <<"\t" << y[2] /* <<"\t\t" << y[3] <<"\t\t" << y[4] <<"\t\t" << y[5] */ << std::endl;
     }
